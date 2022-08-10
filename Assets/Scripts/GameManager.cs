@@ -95,8 +95,14 @@ public class GameManager : MonoBehaviour
                 x = Random.Range(50, 360);
                 y = Random.Range(50, 490);
                 z = 1;
-                randomFigure = usedFigures[Random.Range(0, usedFigures.Count)];
-                Debug.Log(randomFigure);
+                if (usedFigures.Count == 0)
+                {
+                    randomFigure = "";
+                }
+                else
+                {
+                    randomFigure = usedFigures[Random.Range(0, usedFigures.Count)];
+                }
                 lifeTime = Random.Range(int.Parse(minLT.text), int.Parse(maxLT.text));
                 StartCoroutine(SpawnObjects());
                 _cooldownTimer = Random.Range(int.Parse(minCD.text), int.Parse(maxCD.text));
