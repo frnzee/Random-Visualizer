@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: bbde65a04b2194ac48f2715f3e362138
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - spawnedSquare: {fileID: 3494912472974143455, guid: 3336c9c8766d04112bb26a1f815854d6, type: 3}
+  - spawnedCircle: {fileID: 7706341301279463737, guid: ece065c1e4b334534af20e4e103e0e1b, type: 3}
+  - spawnedTriangle: {fileID: 4420858275059854876, guid: 5dbdaa43aafd04120b80c70fa8e969e0, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
