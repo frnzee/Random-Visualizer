@@ -8,18 +8,20 @@ public class Figure : MonoBehaviour
     public GameObject spawnedSquare;
     public GameObject spawnedCircle;
     public GameObject spawnedTriangle;
-    private string r;
+    private GameManager.FigureType ChosenFigure;
     private float _lifeTime;
-    public void Initialize(float lifeTime, string randomFigure)
+    public void Initialize(float lifeTime, GameManager.FigureType randomFigure)
     {
         _lifeTime = lifeTime;
-        r = randomFigure;
+        ChosenFigure = randomFigure;
     }
     public void Update()
     {
-        switch (r)
+        switch (ChosenFigure)
         {
-            case "Square":
+            case GameManager.FigureType.None:
+                break;
+            case GameManager.FigureType.Square:
                 if (_lifeTime > 0)
                 {
                     _lifeTime -= Time.deltaTime;
@@ -30,7 +32,7 @@ public class Figure : MonoBehaviour
                     }
                 }
                 break;
-            case "Circle":
+            case GameManager.FigureType.Circle:
                 if (_lifeTime > 0)
                 {
                     _lifeTime -= Time.deltaTime;
@@ -41,7 +43,7 @@ public class Figure : MonoBehaviour
                     }
                 }
                 break;
-            case "Triangle":
+            case GameManager.FigureType.Triangle:
                 if (_lifeTime > 0)
                 {
                     _lifeTime -= Time.deltaTime;

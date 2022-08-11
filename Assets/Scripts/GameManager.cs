@@ -9,61 +9,79 @@ public class GameManager : MonoBehaviour
     public InputField maxLT;
     public InputField minCD;
     public InputField maxCD;
+
     public Figure squarePrefab;
     public Figure circlePrefab;
     public Figure trianglePrefab;
+
     private Figure spawnedSquare;
     private Figure spawnedCircle;
     private Figure spawnedTriangle;
-    private GameObject gameFieldCanvas;
+
+    public RectTransform GameFieldCanvas;
     public float _cooldownTimer = 1.0f;
     public float lifeTime;
+
     public Toggle _useSquare;
     public Toggle _useCircle;
     public Toggle _useTriangle;
-    private int x, y, z;
-    private List<string> usedFigures = new List<string>();
-    private string randomFigure;
+
+    public enum FigureType
+    {
+        None,
+        Square,
+        Circle,
+        Triangle
+    }
+
+    private int _x, _y;
+    private int _sizeX, _sizeY;
+    private List<FigureType> usedFigures = new List<FigureType>();
+    private FigureType randomFigure;
+
     void Start()
     {
         minLT.text = Random.Range(1, 5).ToString();
         maxLT.text = Random.Range(5, 10).ToString();
         minCD.text = Random.Range(1, 5).ToString();
         maxCD.text = Random.Range(5, 10).ToString();
-        gameFieldCanvas = GameObject.FindWithTag("Canvas");
+        _sizeX = (int)GameFieldCanvas.rect.size.x;
+        _sizeY = (int)GameFieldCanvas.rect.size.y;
+        Debug.Log(_sizeX);
+        Debug.Log(_sizeY);
         _cooldownTimer = Random.Range(int.Parse(minCD.text), int.Parse(maxCD.text));
     }
     public void SquareToggle()
     {
         if (_useSquare.isOn)
         {
-            usedFigures.Add("Square");
+            usedFigures.Add(FigureType.Square);
         }
         else
         {
-            usedFigures.Remove("Square");
+            usedFigures.Remove(FigureType.Square);
         }
     }
     public void CircleToggle()
     {
         if (_useCircle.isOn)
         {
-            usedFigures.Add("Circle");
+            usedFigures.Add(FigureType.Circle);
         }
         else
         {
-            usedFigures.Remove("Circle");
+            usedFigures.Remove(FigureType.Circle);
         }
     }
     public void TriangleToggle()
     {
         if (_useTriangle.isOn)
         {
-            usedFigures.Add("Triangle");
+            usedFigures.Add(FigureType.Triangle);
         }
         else
         {
-            usedFigures.Remove("Triangle");
+            usedFigures.Remove(FigureType.Triangle);
         }
     }
     private IEnumerator SpawnObjects()
@@ -71,33 +89,36 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(_cooldownTimer);
         switch (randomFigure)
         {
-            case "Square":
-                spawnedSquare = Instantiate(squarePrefab, new Vector3(x, y, z), Quaternion.identity, gameFieldCanvas.transform);
+            case FigureType.Square:
+                spawnedSquare = Instantiate(squarePrefab, new Vector2(_x, _y), Quaternion.identity, GameFieldCanvas.transform);
                 spawnedSquare.Initialize(lifeTime, randomFigure);
+                spawnedSquare.transform.localPosition = new Vector2(_x, _y);
                 break;
-            case "Circle":
-                spawnedCircle = Instantiate(circlePrefab, new Vector3(x, y, z), Quaternion.identity, gameFieldCanvas.transform);
+            case FigureType.Circle:
+                spawnedCircle = Instantiate(circlePrefab, new Vector2(_x, _y), Quaternion.identity, GameFieldCanvas.transform);
                 spawnedCircle.Initialize(lifeTime, randomFigure);
+                spawnedCircle.transform.localPosition = new Vector2(_x, _y);
                 break;
-            case "Triangle":
-                spawnedTriangle = Instantiate(trianglePrefab, new Vector3(x, y, z), Quaternion.identity, gameFieldCanvas.transform);
+            case FigureType.Triangle:
+                spawnedTriangle = Instantiate(trianglePrefab, new Vector2(_x, _y), Quaternion.identity, GameFieldCanvas.transform);
                 spawnedTriangle.Initialize(lifeTime, randomFigure);
+                spawnedTriangle.transform.localPosition = new Vector2(_x, _y);
                 break;
         }
     }
-    void Update()
+    private void Update()
     {
         if (_cooldownTimer > 0)
         {
             _cooldownTimer -= Time.deltaTime;
             if (_cooldownTimer <= 0)
             {
-                x = Random.Range(50, 360);
-                y = Random.Range(50, 490);
-                z = 1;
+                _x = Random.Range(50, _sizeX - 50);
+                _y = Random.Range(50, _sizeY - 50);
+                Debug.Log(_x + " " + _y);
                 if (usedFigures.Count == 0)
                 {
-                    randomFigure = "";
+                    randomFigure = FigureType.None;
                 }
                 else
                 {
