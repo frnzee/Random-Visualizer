@@ -5,26 +5,22 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    public InputField minLT;
-    public InputField maxLT;
-    public InputField minCD;
-    public InputField maxCD;
+    public InputField MinLT;
+    public InputField MaxLT;
+    public InputField MinCD;
+    public InputField MaxCD;
 
-    public Figure squarePrefab;
-    public Figure circlePrefab;
-    public Figure trianglePrefab;
-
-    private Figure spawnedSquare;
-    private Figure spawnedCircle;
-    private Figure spawnedTriangle;
+    public Figure SquarePrefab;
+    public Figure CirclePrefab;
+    public Figure TrianglePrefab;
 
     public RectTransform GameFieldCanvas;
-    public float _cooldownTimer = 1.0f;
-    public float lifeTime;
 
-    public Toggle _useSquare;
-    public Toggle _useCircle;
-    public Toggle _useTriangle;
+    private float _cooldownTimer = 1.0f;
+
+    public Toggle UseSquare;
+    public Toggle UseCircle;
+    public Toggle UseTriangle;
 
     public enum FigureType
     {
@@ -36,76 +32,98 @@ public class GameManager : MonoBehaviour
 
     private int _x, _y;
     private int _sizeX, _sizeY;
-    private List<FigureType> usedFigures = new List<FigureType>();
-    private FigureType randomFigure;
+
+    private List<FigureType> _usedFigures = new List<FigureType>();
+    private FigureType _randomFigure;
 
     void Start()
     {
-        minLT.text = Random.Range(1, 5).ToString();
-        maxLT.text = Random.Range(5, 10).ToString();
-        minCD.text = Random.Range(1, 5).ToString();
-        maxCD.text = Random.Range(5, 10).ToString();
+        MinLT.text = Random.Range(1, 5).ToString();
+        MaxLT.text = Random.Range(5, 10).ToString();
+        MinCD.text = Random.Range(1, 5).ToString();
+        MaxCD.text = Random.Range(5, 10).ToString();
+
         _sizeX = (int)GameFieldCanvas.rect.size.x;
         _sizeY = (int)GameFieldCanvas.rect.size.y;
-        Debug.Log(_sizeX);
-        Debug.Log(_sizeY);
-        _cooldownTimer = Random.Range(int.Parse(minCD.text), int.Parse(maxCD.text));
+
+        _cooldownTimer = Random.Range(int.Parse(MinCD.text), int.Parse(MaxCD.text));
     }
+
     public void SquareToggle()
     {
-        if (_useSquare.isOn)
+        if (UseSquare.isOn)
         {
-            usedFigures.Add(FigureType.Square);
+            _usedFigures.Add(FigureType.Square);
         }
         else
         {
-            usedFigures.Remove(FigureType.Square);
+            _usedFigures.Remove(FigureType.Square);
         }
     }
     public void CircleToggle()
     {
-        if (_useCircle.isOn)
+        if (UseCircle.isOn)
         {
-            usedFigures.Add(FigureType.Circle);
+            _usedFigures.Add(FigureType.Circle);
         }
         else
         {
-            usedFigures.Remove(FigureType.Circle);
+            _usedFigures.Remove(FigureType.Circle);
         }
     }
     public void TriangleToggle()
     {
-        if (_useTriangle.isOn)
+        if (UseTriangle.isOn)
         {
-            usedFigures.Add(FigureType.Triangle);
+            _usedFigures.Add(FigureType.Triangle);
         }
         else
         {
-            usedFigures.Remove(FigureType.Triangle);
+            _usedFigures.Remove(FigureType.Triangle);
         }
     }
-    private IEnumerator SpawnObjects()
+
+    private IEnumerator SpawnObjects(float lifeTime)
     {
         yield return new WaitForSeconds(_cooldownTimer);
-        switch (randomFigure)
+        switch (_randomFigure)
         {
             case FigureType.Square:
-                spawnedSquare = Instantiate(squarePrefab, new Vector2(_x, _y), Quaternion.identity, GameFieldCanvas.transform);
-                spawnedSquare.Initialize(lifeTime, randomFigure);
+                var spawnedSquare = Instantiate(SquarePrefab, GameFieldCanvas.transform);
                 spawnedSquare.transform.localPosition = new Vector2(_x, _y);
+                spawnedSquare.Initialize(lifeTime);
                 break;
             case FigureType.Circle:
-                spawnedCircle = Instantiate(circlePrefab, new Vector2(_x, _y), Quaternion.identity, GameFieldCanvas.transform);
-                spawnedCircle.Initialize(lifeTime, randomFigure);
+                var spawnedCircle = Instantiate(CirclePrefab, GameFieldCanvas.transform);
                 spawnedCircle.transform.localPosition = new Vector2(_x, _y);
+                spawnedCircle.Initialize(lifeTime);
                 break;
             case FigureType.Triangle:
-                spawnedTriangle = Instantiate(trianglePrefab, new Vector2(_x, _y), Quaternion.identity, GameFieldCanvas.transform);
-                spawnedTriangle.Initialize(lifeTime, randomFigure);
+                var spawnedTriangle = Instantiate(TrianglePrefab, GameFieldCanvas.transform);
                 spawnedTriangle.transform.localPosition = new Vector2(_x, _y);
+                spawnedTriangle.Initialize(lifeTime);
                 break;
         }
     }
+
+    private void Spawn()
+    {
+        if (_usedFigures.Count == 0)
+        {
+            _randomFigure = FigureType.None;
+        }
+        else
+        {
+            _x = Random.Range(50, _sizeX - 50);
+            _y = Random.Range(50, _sizeY - 50);
+
+            _randomFigure = _usedFigures[Random.Range(0, _usedFigures.Count)];
+
+            var lifeTime = Random.Range(int.Parse(MinLT.text), int.Parse(MaxLT.text));
+            StartCoroutine(SpawnObjects(lifeTime));
+        }
+    }
+
     private void Update()
     {
         if (_cooldownTimer > 0)
@@ -113,20 +131,8 @@ public class GameManager : MonoBehaviour
             _cooldownTimer -= Time.deltaTime;
             if (_cooldownTimer <= 0)
             {
-                _x = Random.Range(50, _sizeX - 50);
-                _y = Random.Range(50, _sizeY - 50);
-                Debug.Log(_x + " " + _y);
-                if (usedFigures.Count == 0)
-                {
-                    randomFigure = FigureType.None;
-                }
-                else
-                {
-                    randomFigure = usedFigures[Random.Range(0, usedFigures.Count)];
-                }
-                lifeTime = Random.Range(int.Parse(minLT.text), int.Parse(maxLT.text));
-                StartCoroutine(SpawnObjects());
-                _cooldownTimer = Random.Range(int.Parse(minCD.text), int.Parse(maxCD.text));
+                Spawn();
+                _cooldownTimer = Random.Range(int.Parse(MinCD.text), int.Parse(MaxCD.text));
             }
         }
     }

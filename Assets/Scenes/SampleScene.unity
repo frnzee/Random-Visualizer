@@ -1801,19 +1801,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bcb2cfa3096ba44939b87a75936b1c21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minLT: {fileID: 423979486}
-  maxLT: {fileID: 1783064098}
-  minCD: {fileID: 389398879}
-  maxCD: {fileID: 1882048667}
-  squarePrefab: {fileID: 4596798736941893112, guid: 3336c9c8766d04112bb26a1f815854d6, type: 3}
-  circlePrefab: {fileID: 2169243081713275782, guid: ece065c1e4b334534af20e4e103e0e1b, type: 3}
-  trianglePrefab: {fileID: 3792846648875635939, guid: 5dbdaa43aafd04120b80c70fa8e969e0, type: 3}
+  MinLT: {fileID: 423979486}
+  MaxLT: {fileID: 1783064098}
+  MinCD: {fileID: 389398879}
+  MaxCD: {fileID: 1882048667}
+  SquarePrefab: {fileID: 4596798736941893112, guid: 3336c9c8766d04112bb26a1f815854d6, type: 3}
+  CirclePrefab: {fileID: 2169243081713275782, guid: ece065c1e4b334534af20e4e103e0e1b, type: 3}
+  TrianglePrefab: {fileID: 3792846648875635939, guid: 5dbdaa43aafd04120b80c70fa8e969e0, type: 3}
   GameFieldCanvas: {fileID: 2143185020}
-  _cooldownTimer: 1
-  lifeTime: 0
-  _useSquare: {fileID: 1470651526}
-  _useCircle: {fileID: 2016081368}
-  _useTriangle: {fileID: 161552640}
+  UseSquare: {fileID: 1470651526}
+  UseCircle: {fileID: 2016081368}
+  UseTriangle: {fileID: 161552640}
 --- !u!4 &1280478733
 Transform:
   m_ObjectHideFlags: 0
